@@ -1,6 +1,6 @@
 # Photo credits
 
-The sample item photos in `img/` come from [Wikimedia Commons](https://commons.wikimedia.org/). They were resized for this game. Each one is used under the license listed below; follow the source link for full license details.
+The numbered sample photos in `img/` (`00.jpg` to `39.jpg`) come from [Wikimedia Commons](https://commons.wikimedia.org/). They were resized for this game. Each one is used under the license listed below; follow the source link for full license details.
 
 | Photo | Author | License | Source |
 |---|---|---|---|
@@ -44,3 +44,5 @@ The sample item photos in `img/` come from [Wikimedia Commons](https://commons.w
 | [img/37.jpg](img/37.jpg) | Wolfgang Sauber | CC BY-SA 3.0 | [Commons](https://commons.wikimedia.org/wiki/File:La_Orotava_-_MAI_Talavera_Vase.jpg) |
 | [img/38.jpg](img/38.jpg) | Photograph: Frank C. Müller, Baden-Baden | CC BY-SA 2.5 | [Commons](https://commons.wikimedia.org/wiki/File:Toepfe_(fcm).jpg) |
 | [img/39.jpg](img/39.jpg) | Thank You (24 Millions ) views from Fresno, USA | CC BY 2.0 | [Commons](https://commons.wikimedia.org/wiki/File:QUINCEANERA_(4678786630).jpg) |
+
+The `img/m01.jpg` to `img/m11.jpg` photos are Marketplace finds supplied by the game host, not Wikimedia Commons images.

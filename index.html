@@ -172,7 +172,7 @@ dialog::backdrop{background:#160b08b3;-webkit-backdrop-filter:blur(4px);backdrop
       <div class="drop" id="drop">Drop screenshots here, paste them (Ctrl/Cmd+V), or
         <label style="display:inline-block"><input id="files" type="file" accept="image/*" multiple class="hide"><span style="text-decoration:underline;cursor:pointer;font-weight:700;color:var(--cran)">choose files</span></label>.
         <button type="button" class="lite" id="addBlank" style="margin-left:8px">Add item without a picture</button>
-        <div style="margin-top:12px"><button type="button" class="harvest" data-act="samples">Add 30 sample Marketplace items</button> <button type="button" class="harvest" data-act="mexican">Add 10 Mexican items</button> <button type="button" class="warn" data-act="clearitems">Remove all items</button></div>
+        <div style="margin-top:12px"><button type="button" class="harvest" data-act="mine">Add my 11 real finds</button> <button type="button" class="harvest" data-act="samples">Add 30 sample Marketplace items</button> <button type="button" class="harvest" data-act="mexican">Add 10 Mexican items</button> <button type="button" class="warn" data-act="clearitems">Remove all items</button></div>
       </div>
       <div id="ilist"></div>
       <p class="note">Screenshots stay in this browser. They are never uploaded. Sample photos are from Wikimedia Commons (<a href="CREDITS.md" target="_blank" rel="noopener">photo credits</a>).</p>
@@ -2688,7 +2688,20 @@ function hostApp(){
     ['🏺','Talavera pottery vase, hand painted','Used - good','8 mi',60],
     ['🫔','Tamalera steamer pot with lid','Used - good','2 mi',40],
     ['👗','Quinceañera dress with crinoline','Used - like new','17 mi',250]];
-  function addSamples(list,first){list.forEach(([emoji,title,cond,dist,price],i)=>S.items.push({id:uid(),title,price,cover:null,emoji,src:'img/'+String(first+i).padStart(2,'0')+'.jpg',desc:[cond,dist+' away']}));
+  /* real Marketplace finds (img/mNN.jpg) with listing prices; [.., cover] hides the price printed on the screenshot until Reveal */
+  const MINE=[
+    ['🔊','Speaker','','',65,{x:.02,y:.9326,w:.36,h:.0551}],
+    ['🧹','Eureka PowerSpeed bagless upright vacuum','','',50,{x:.02,y:.9372,w:.36,h:.0524}],
+    ['⛺','Canopy and draping (for rent)','','',120,{x:.02,y:.9326,w:.36,h:.0551}],
+    ['🎸','Fender Stratocaster with hardshell case','','',450,{x:.02,y:.8911,w:.36,h:.0498}],
+    ['🎺','Yamaha YTR-2330 student trumpet, silver','','',1100,{x:.02,y:.902,w:.36,h:.0477}],
+    ['🚗','2023 Mazda3 2.5 Carbon Turbo sedan','','',22800,{x:.02,y:.897,w:.36,h:.0502}],
+    ['🤼','Máscaras luchadores','','',25,{x:.02,y:.9326,w:.36,h:.0551}],
+    ['👢','Botas y cinto vaquero','','',220,{x:.02,y:.9326,w:.36,h:.0551}],
+    ['🤠','Sombrero Tejana White Diamond 10Mil X','','',275,{x:.02,y:.9372,w:.36,h:.0524}],
+    ['🔥','Grill with two propane tanks','Used - fair','Los Angeles',80],
+    ['🪑','Vintage wood and tile table from New Mexico','Used - fair','Los Angeles',250]];
+  function addSamples(list,pre,first){list.forEach(([emoji,title,cond,dist,price,cover],i)=>S.items.push({id:uid(),title,price,cover:cover||null,emoji,src:'img/'+pre+String(first+i).padStart(2,'0')+'.jpg',desc:[cond,/\d/.test(dist)?dist+' away':dist].filter(Boolean)}));
     if(S.phase==='done')S.phase='ready';renderSetup();changed();toast('Added '+list.length+' sample items.')}
 
   const item=()=>S.items[S.idx];
@@ -2738,7 +2751,7 @@ function hostApp(){
     $('#tsec').value=document.activeElement===$('#tsec')?$('#tsec').value:S.timerSec;
     let ibh='';
     /* item */
-    if(!S.items.length){ibh=`<div class="noimg disp" style="color:var(--cran)">No items yet</div><p class="note">Open Setup to add your Marketplace screenshots and their prices, or start with 30 sample items.</p><div class="line" style="justify-content:center"><button class="primary" style="width:auto" data-act="samples">Use 30 sample items</button><button class="ghost" style="color:var(--cran);border-color:#9b2c2c55" data-act="setup">Open setup</button></div>`}
+    if(!S.items.length){ibh=`<div class="noimg disp" style="color:var(--cran)">No items yet</div><p class="note">Open Setup to add your Marketplace screenshots and their prices, or start with 30 sample items.</p><div class="line" style="justify-content:center"><button class="primary" style="width:auto" data-act="mine">Use my 11 real finds</button><button class="ghost" style="color:var(--cran);border-color:#9b2c2c55" data-act="samples">Use 30 sample items</button><button class="ghost" style="color:var(--cran);border-color:#9b2c2c55" data-act="setup">Open setup</button></div>`}
     else if(ph==='done'){const top=[...S.players].sort((a,b)=>b.score-a.score);const best=top[0]?top[0].score:0;const champs=top.filter(p=>p.score===best&&best>0);
       ibh=`<h2 class="disp" style="color:var(--cran);font-size:clamp(28px,4vw,64px);text-align:center">${champs.length?esc(champs.map(p=>p.name).join(' & '))+' win'+(champs.length>1?'':'s')+'!':'Game over'}</h2><ul class="final">${top.map(p=>`<li><span>${esc(p.name)}</span><span>${p.score}</span></li>`).join('')}</ul>`}
     else{const src=picOf(it);const hid=ph!=='revealed';const c=it.cover;const meta=it.desc?`<div class="lmeta">${it.desc.map(d=>`<span>${esc(d)}</span>`).join('')}</div>`:'';
@@ -2820,8 +2833,9 @@ function hostApp(){
     const row=b.closest('[data-iid]'),ii=row?S.items.findIndex(x=>x.id===row.dataset.iid):-1;
     if(a==='primary')primary();
     else if(a==='setup')openSetup();
-    else if(a==='samples')addSamples(SAMPLES,0);
-    else if(a==='mexican')addSamples(MEXICAN,30);
+    else if(a==='samples')addSamples(SAMPLES,'',0);
+    else if(a==='mexican')addSamples(MEXICAN,'',30);
+    else if(a==='mine')addSamples(MINE,'m',1);
     else if(a==='clearitems'){if(!S.items.length||!confirm('Remove all '+S.items.length+' items?'))return;S.items.forEach(x=>{imgs.delete(x.id);idb.del(x.id)});S.items=[];S.idx=0;S.phase='ready';S.bids={};renderSetup();changed()}
     else if(a==='redo'){S.bids={};S.phase='ready';changed()}
     else if(a==='restart'){S.idx=0;S.phase='ready';S.bids={};S.players.forEach(x=>x.score=0);changed()}
