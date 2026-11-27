@@ -5,71 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Guess That Price</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700..900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#5b1220;--bg2:#3f0b15;--panel:#fff6e6;--ink:#2a1210;--gold:#ffc53d;--pump:#f27a1a;--cream:#fff6e6;--green:#1f8a4c;--line:#e6d3b3;--muted:#8a6f5e}
+:root{--bg:#2a1712;--bg2:#160b08;--panel:#fffaf2;--ink:#2b1a12;--gold:#f2b84b;--pump:#e2702a;--cran:#9b2c2c;--cream:#fff4e3;--green:#3f7d55;--line:#ecdcc4;--muted:#8b7262;--glass:#ffffff0f;--glassline:#ffffff1f}
 *{box-sizing:border-box;min-width:0}
 html,body{height:100%}
-body{margin:0;background:radial-gradient(circle at 50% -10%,#7d1c2e,var(--bg) 45%,var(--bg2));color:var(--cream);font:16px/1.45 "DM Sans",system-ui,sans-serif;overflow-x:hidden}
-h1,h2,h3,.disp{font-family:"Bowlby One","Arial Black",Impact,sans-serif;font-weight:400;letter-spacing:.01em;margin:0}
+body{margin:0;background:radial-gradient(1200px 600px at 15% -10%,#7a3a14aa,transparent 60%),radial-gradient(900px 600px at 100% 0%,#6b1d2a99,transparent 55%),radial-gradient(1000px 700px at 50% 120%,#3b2410,transparent 60%),linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;color:var(--cream);font:16px/1.45 "DM Sans",system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3,.disp{font-family:"Fraunces",Georgia,serif;font-weight:800;letter-spacing:-.01em;margin:0}
 button,input,select{font:inherit}
-button{cursor:pointer;border:0;border-radius:12px;padding:10px 16px;background:#ffffff22;color:var(--cream);font-weight:700}
-button:hover{background:#ffffff33}
+button{cursor:pointer;border:1px solid var(--glassline);border-radius:999px;padding:10px 18px;background:var(--glass);color:var(--cream);font-weight:700;transition:background .15s,transform .15s,box-shadow .15s}
+button:hover{background:#ffffff1f}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-button.primary{background:var(--gold);color:#3a1a00;font-size:clamp(18px,1.6vw,26px);padding:16px 26px;box-shadow:0 5px 0 #b8860b;width:100%}
-button.primary:hover{background:#ffd35f}
-button.primary:active{transform:translateY(3px);box-shadow:0 2px 0 #b8860b}
+button.primary{background:linear-gradient(135deg,var(--pump),var(--gold));border:0;color:#2a1405;font-size:clamp(18px,1.6vw,26px);padding:16px 28px;box-shadow:0 10px 24px -8px #e2702a99,inset 0 1px 0 #ffffff66;width:100%}
+button.primary:hover{transform:translateY(-1px);box-shadow:0 14px 28px -8px #e2702aaa,inset 0 1px 0 #ffffff66;background:linear-gradient(135deg,#ec8034,#f6c461)}
+button.primary:active{transform:translateY(1px);box-shadow:0 6px 14px -6px #e2702a99}
 button.ghost{background:transparent;border:2px solid #ffffff44}
-button.on{background:var(--green);color:#fff}
-input,select{border:2px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;color:var(--ink);font-size:16px}
+button.on{background:var(--green);border-color:var(--green);color:#fff}
+input,select{border:1.5px solid var(--line);border-radius:12px;padding:9px 12px;background:#fff;color:var(--ink);font-size:16px}
 .hide{display:none!important}
 
+/* ---------- leaves ---------- */
+.leaves{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.leaves i{position:absolute;top:-8vh;font-style:normal;opacity:.22;animation:fall linear infinite}
+.leaves i:nth-child(1){left:6%;font-size:26px;animation-duration:19s}
+.leaves i:nth-child(2){left:22%;font-size:18px;animation-duration:24s;animation-delay:-6s}
+.leaves i:nth-child(3){left:41%;font-size:30px;animation-duration:27s;animation-delay:-14s}
+.leaves i:nth-child(4){left:63%;font-size:20px;animation-duration:21s;animation-delay:-3s}
+.leaves i:nth-child(5){left:79%;font-size:28px;animation-duration:25s;animation-delay:-11s}
+.leaves i:nth-child(6){left:93%;font-size:17px;animation-duration:22s;animation-delay:-17s}
+@keyframes fall{to{transform:translateY(118vh) translateX(40px) rotate(320deg)}}
+#host,#phone{position:relative;z-index:1}
+
 /* ---------- host ---------- */
-#host{min-height:100vh;display:flex;flex-direction:column;padding:14px clamp(12px,2vw,28px) 18px;gap:14px}
-.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.top h1{font-size:clamp(22px,2.6vw,40px);color:var(--gold);text-shadow:0 3px 0 #00000055;margin-right:auto}
-.top h1 small{display:block;font:500 13px "DM Sans",sans-serif;color:#ffd9a8;letter-spacing:.02em;text-shadow:none}
-.chip{display:flex;align-items:center;gap:6px;background:#ffffff18;border-radius:12px;padding:6px 10px;font-weight:700}
-.chip input{width:64px;padding:5px 6px;text-align:center}
+#host{min-height:100vh;display:flex;flex-direction:column;padding:16px clamp(12px,2vw,28px) 20px;gap:16px}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.top h1{font-size:clamp(24px,2.8vw,44px);margin-right:auto;background:linear-gradient(90deg,var(--gold),#ffd9a0 45%,var(--pump));-webkit-background-clip:text;background-clip:text;color:transparent}
+.top h1 small{display:block;font:500 13px "DM Sans",sans-serif;color:#f3cfa3;letter-spacing:.14em;text-transform:uppercase;-webkit-text-fill-color:#f3cfa3}
+.chip{display:flex;align-items:center;gap:6px;background:var(--glass);border:1px solid var(--glassline);border-radius:999px;padding:5px 8px 5px 14px;font-weight:700}
+.chip input{width:64px;padding:5px 6px;text-align:center;border-radius:999px}
 .stage{flex:1;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.9fr);gap:16px;min-height:0}
-.card{background:var(--panel);color:var(--ink);border-radius:20px;box-shadow:0 10px 0 #00000033;padding:16px}
+.card{background:linear-gradient(180deg,#fffdf8,var(--panel));color:var(--ink);border-radius:28px;border:1px solid #fff;box-shadow:0 30px 60px -30px #000c,0 2px 0 #00000014;padding:20px}
 .item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:300px}
 .shot{position:relative;display:inline-block;line-height:0;border-radius:12px;overflow:hidden;box-shadow:0 2px 14px #0003}
 .shot img{max-width:100%;max-height:max(200px,calc(100vh - 470px));display:block}
-.cover{position:absolute;background:repeating-linear-gradient(45deg,var(--gold) 0 14px,#ffb300 14px 28px);border:3px solid #7a4b00;border-radius:8px;display:grid;place-items:center;color:#5a3300;font:400 clamp(14px,2vw,30px) "Bowlby One",sans-serif;line-height:1}
+.cover{position:absolute;background:repeating-linear-gradient(45deg,var(--gold) 0 14px,#ffb300 14px 28px);border:3px solid #7a4b00;border-radius:8px;display:grid;place-items:center;color:#5a3300;font:400 clamp(14px,2vw,30px) "Fraunces",sans-serif;line-height:1}
 .cover.gone{animation:pop .5s forwards}
 @keyframes pop{to{transform:scale(1.5) rotate(8deg);opacity:0}}
 .noimg{font-size:clamp(28px,4vw,60px);text-align:center;padding:30px}
+.listing{display:flex;flex-direction:column;align-items:center;gap:14px;width:min(100%,560px)}
+.listing .lpic{width:100%;aspect-ratio:16/10;max-height:max(180px,calc(100vh - 520px));border-radius:22px;display:grid;place-items:center;font-size:clamp(80px,12vw,180px);line-height:1;background:radial-gradient(circle at 30% 25%,#fff3dc,#f6dcb4 55%,#e9c28f);box-shadow:inset 0 0 0 1px #00000010,0 14px 30px -18px #7a3a14}
+.listing .lmeta{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.listing .lmeta span{background:#f4e6d0;color:#6a4a36;border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700}
 .ititle{font-weight:700;font-size:clamp(18px,1.8vw,28px);text-align:center}
 .icount{color:var(--muted);font-weight:700;font-size:14px}
 .side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
-.side h2{font-size:clamp(20px,2vw,32px);color:#7a1626}
-.big{font-family:"Bowlby One","Arial Black",sans-serif;font-size:clamp(70px,11vw,190px);line-height:1;color:#7a1626;font-variant-numeric:tabular-nums}
+.side h2{font-size:clamp(20px,2vw,32px);color:var(--cran)}
+.big{font-family:"Fraunces","Arial Black",sans-serif;font-size:clamp(70px,11vw,190px);line-height:1;color:var(--cran);font-variant-numeric:tabular-nums}
 .big.low{color:#d6260f;animation:pulse .5s infinite alternate}
 @keyframes pulse{to{transform:scale(1.07)}}
-.price{font-family:"Bowlby One","Arial Black",sans-serif;font-size:clamp(54px,8vw,150px);line-height:1;color:var(--green);animation:drop .5s cubic-bezier(.2,1.6,.4,1)}
+.price{font-family:"Fraunces","Arial Black",sans-serif;font-size:clamp(54px,8vw,150px);line-height:1;color:var(--green);animation:drop .5s cubic-bezier(.2,1.6,.4,1)}
 @keyframes drop{from{transform:scale(.2);opacity:0}}
 .qr{background:#fff;padding:8px;border-radius:12px;width:min(100%,250px)}
 .qr svg{display:block;width:100%;height:auto}
 .url{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
-.code{font:400 28px "Bowlby One",sans-serif;letter-spacing:.12em;color:#7a1626}
+.code{font:400 28px "Fraunces",sans-serif;letter-spacing:.12em;color:var(--cran)}
 .note{font-size:14px;color:var(--muted)}
 .net{font-size:13px;font-weight:700;color:#b3261e}
 .pods{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.pod{background:#2b0710;border:3px solid #ffffff22;border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:8px;align-items:stretch;text-align:center;position:relative}
-.pod.has{border-color:var(--gold)}
-.pod.win{border-color:#38d27a;background:#0f3b22;box-shadow:0 0 0 4px #38d27a55}
-.pod .name{background:var(--pump);color:#fff;font-size:clamp(16px,1.5vw,24px);padding:10px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pod .name:hover{background:#ff8f33}
+.pod{background:var(--glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1.5px solid var(--glassline);border-radius:22px;padding:12px;display:flex;flex-direction:column;gap:8px;align-items:stretch;text-align:center;position:relative;transition:border-color .2s,background .2s}
+.pod.has{border-color:var(--gold);background:#f2b84b14}
+.pod.win{border-color:#6fcf8f;background:#3f7d5533;box-shadow:0 0 0 4px #6fcf8f33,0 16px 30px -14px #3f7d55}
+.pod .name{background:linear-gradient(135deg,var(--cran),#c2452c);border:0;color:#fff;font-size:clamp(16px,1.5vw,24px);padding:10px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod .name:hover{background:linear-gradient(135deg,#b13636,#d5562f)}
 .pod .row{display:flex;align-items:center;justify-content:center;gap:8px}
-.pod .score{font:400 clamp(24px,2.4vw,40px) "Bowlby One",sans-serif;color:var(--gold);font-variant-numeric:tabular-nums}
+.pod .score{font:400 clamp(24px,2.4vw,40px) "Fraunces",sans-serif;color:var(--gold);font-variant-numeric:tabular-nums}
 .pod .mini{padding:2px 9px;border-radius:8px;font-size:15px;background:#ffffff18}
 .pod .bid{font-weight:700;font-size:clamp(18px,1.7vw,28px);min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;font-variant-numeric:tabular-nums}
 .pod .bid.over{color:#ff9d9d;text-decoration:line-through}
 .pod .bid input{width:100%;text-align:center}
 .pod .tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#38d27a;color:#06301a;font-size:12px;font-weight:700;border-radius:99px;padding:2px 10px;white-space:nowrap}
 .pod .live{position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:#38d27a}
-.plus{position:absolute;inset:0;display:grid;place-items:center;font:400 46px "Bowlby One",sans-serif;color:var(--gold);pointer-events:none;animation:rise .8s forwards}
+.plus{position:absolute;inset:0;display:grid;place-items:center;font:400 46px "Fraunces",sans-serif;color:var(--gold);pointer-events:none;animation:rise .8s forwards}
 @keyframes rise{to{transform:translateY(-50px);opacity:0}}
 .empty{color:#ffd9a8;text-align:center;padding:14px}
 .heard{font-size:14px;color:#ffd9a8;min-height:20px}
@@ -79,14 +95,15 @@ input,select{border:2px solid var(--line);border-radius:10px;padding:9px 11px;ba
 .final li:first-child{color:var(--green);font-size:1.25em}
 
 /* ---------- setup ---------- */
-dialog{border:0;border-radius:20px;padding:0;background:var(--panel);color:var(--ink);width:min(880px,94vw);max-height:92vh}
-dialog::backdrop{background:#000a}
+dialog{border:0;border-radius:28px;padding:0;background:var(--panel);color:var(--ink);width:min(880px,94vw);max-height:92vh;box-shadow:0 40px 80px -30px #000}
+dialog::backdrop{background:#160b08b3;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .dlg{padding:20px;display:flex;flex-direction:column;gap:18px}
-.dlg h2{color:#7a1626;font-size:26px}
-.dlg h3{font-size:18px;color:#7a1626;margin-bottom:8px}
-.dlg button{background:#7a1626;color:#fff}
-.dlg button.lite{background:#eadbc1;color:var(--ink)}
+.dlg h2{color:var(--cran);font-size:26px}
+.dlg h3{font-size:18px;color:var(--cran);margin-bottom:8px}
+.dlg button{background:var(--cran);border-color:transparent;color:#fff}
+.dlg button.lite{background:#f1e4cf;color:var(--ink)}
 .dlg button.warn{background:#fde2de;color:#b3261e}
+.dlg button.harvest{background:linear-gradient(135deg,var(--pump),var(--gold));color:#2a1405}
 .line{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .tagp{background:#fff;border:2px solid var(--line);border-radius:99px;padding:4px 6px 4px 12px;display:flex;align-items:center;gap:6px;font-weight:700}
@@ -109,7 +126,7 @@ dialog::backdrop{background:#000a}
 #phone h1{font-size:28px;color:var(--gold);text-align:center}
 #phone .card{padding:18px}
 #phone .me{display:flex;justify-content:space-between;align-items:center;font-weight:700}
-#phone .me b{font:400 26px "Bowlby One",sans-serif;color:var(--gold)}
+#phone .me b{font:400 26px "Fraunces",sans-serif;color:var(--gold)}
 #phone input{width:100%;font-size:26px;padding:14px;text-align:center}
 #phone .big{font-size:84px}
 #phone .price{font-size:64px}
@@ -120,14 +137,15 @@ dialog::backdrop{background:#000a}
 #phone .board li{display:flex;justify-content:space-between;gap:10px;padding:7px 2px;border-bottom:1px solid #ffffff22;font-weight:700}
 #phone .board li.you{color:var(--gold)}
 #phone .status{text-align:center;font-size:14px;color:#ffd9a8}
-@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}.leaves{display:none}}
 </style>
 </head>
 <body>
+<div class="leaves" aria-hidden="true"><i>🍁</i><i>🍂</i><i>🍁</i><i>🍂</i><i>🍁</i><i>🍂</i></div>
 
 <div id="host" class="hide">
   <div class="top">
-    <h1>Guess That Price<small>Thanksgiving Marketplace Edition</small></h1>
+    <h1>Guess That Price<small>🦃 Thanksgiving Marketplace Edition</small></h1>
     <label class="chip">Timer <input id="tsec" type="number" min="5" max="600" step="5" aria-label="Seconds per round"> sec</label>
     <button id="voiceBtn" title="Players say their name and a price, like: Mom 45">Voice bids: off</button>
     <button id="setupBtn">Setup</button>
@@ -152,8 +170,9 @@ dialog::backdrop{background:#000a}
     <section>
       <h3>Items</h3>
       <div class="drop" id="drop">Drop screenshots here, paste them (Ctrl/Cmd+V), or
-        <label style="display:inline-block"><input id="files" type="file" accept="image/*" multiple class="hide"><span style="text-decoration:underline;cursor:pointer;font-weight:700;color:#7a1626">choose files</span></label>.
+        <label style="display:inline-block"><input id="files" type="file" accept="image/*" multiple class="hide"><span style="text-decoration:underline;cursor:pointer;font-weight:700;color:var(--cran)">choose files</span></label>.
         <button type="button" class="lite" id="addBlank" style="margin-left:8px">Add item without a picture</button>
+        <div style="margin-top:12px"><button type="button" class="harvest" data-act="samples">Add 30 sample Marketplace items</button></div>
       </div>
       <div id="ilist"></div>
       <p class="note">Screenshots stay in this browser. They are never uploaded.</p>
@@ -2626,6 +2645,41 @@ function hostApp(){
     put(k,v){try{idb.tx('readwrite').put(v,k)}catch(e){}},del(k){try{idb.tx('readwrite').delete(k)}catch(e){}},
     all(){return new Promise(res=>{if(!idb.db)return res();try{const r=idb.tx('readonly').openCursor();r.onsuccess=()=>{const c=r.result;if(c){imgs.set(c.key,c.value);c.continue()}else res()};r.onerror=()=>res()}catch(e){res()}})}};
 
+  /* made-up but realistic Marketplace listings: [emoji, title, condition, distance, price] */
+  const SAMPLES=[
+    ['🧁','KitchenAid Artisan stand mixer, 5 qt, red','Used - like new','3 mi',180],
+    ['🚴','Peloton bike, original, with shoes','Used - good','11 mi',425],
+    ['🪑','Solid oak dining table + 6 chairs','Used - good','7 mi',350],
+    ['🎮','Nintendo Switch OLED + 3 games','Used - like new','2 mi',235],
+    ['🥣','Vintage Pyrex mixing bowls, set of 4','Used - fair','15 mi',65],
+    ['🛋️','Gray sectional couch, pet-free home','Used - good','9 mi',400],
+    ['🤸','14 ft trampoline with net, you haul','Used - fair','18 mi',90],
+    ['🍲','Instant Pot Duo, 6 qt','Used - like new','4 mi',40],
+    ['🚙','Power Wheels Jeep, 12V, two batteries','Used - good','6 mi',110],
+    ['🧹','Dyson V8 cordless vacuum','Used - good','5 mi',130],
+    ['📺','Samsung 55" 4K smart TV','Used - like new','12 mi',220],
+    ['🍳','Griswold #8 cast iron skillet','Used - good','22 mi',85],
+    ['🦃','Turkey fryer kit, used twice','Used - like new','8 mi',45],
+    ['🔥','Weber Spirit II gas grill','Used - good','10 mi',175],
+    ['🗄️','Mid-century walnut dresser','Used - good','14 mi',275],
+    ['🏎️','Bin of 200+ Hot Wheels cars','Used - fair','3 mi',60],
+    ['📱','iPhone 13, 128 GB, cracked back','Used - fair','1 mi',240],
+    ['🎈','8 ft inflatable lawn turkey','Used - good','6 mi',30],
+    ['🪵','Electric fireplace TV stand','Used - like new','13 mi',150],
+    ['🚜','John Deere riding mower, 42"','Used - good','25 mi',950],
+    ['👰','Wedding dress, size 8, never altered','New','19 mi',300],
+    ['🎸','Taylor acoustic guitar with hard case','Used - like new','8 mi',450],
+    ['🛏️','Convertible crib + mattress','Used - good','5 mi',110],
+    ['❄️','4 snow tires on rims, 17"','Used - good','16 mi',320],
+    ['🫕','Le Creuset Dutch oven, 5.5 qt','Used - like new','7 mi',190],
+    ['🧊','Chest freezer, 7 cu ft','Used - good','11 mi',140],
+    ['💺','La-Z-Boy leather recliner','Used - fair','4 mi',160],
+    ['🧸','Princess Diana Beanie Baby, "rare"','Used - like new','2 mi',25],
+    ['🎄','7.5 ft pre-lit Christmas tree','Used - good','9 mi',70],
+    ['🚗','2011 Honda Civic, 162k miles','Used - fair','20 mi',4800]];
+  function addSamples(){for(const [emoji,title,cond,dist,price] of SAMPLES)S.items.push({id:uid(),title,price,cover:null,emoji,desc:[cond,dist+' away']});
+    if(S.phase==='done')S.phase='ready';renderSetup();changed();toast('Added 30 sample items.')}
+
   const item=()=>S.items[S.idx];
   const online=pid=>[...connPid.values()].includes(pid);
   const joinUrl=()=>location.origin+location.pathname+'?room='+S.code+(BC?'&transport=bc':'');
@@ -2672,11 +2726,12 @@ function hostApp(){
     $('#tsec').value=document.activeElement===$('#tsec')?$('#tsec').value:S.timerSec;
     let ibh='';
     /* item */
-    if(!S.items.length){ibh=`<div class="noimg disp" style="color:#7a1626">No items yet</div><p class="note">Open Setup to add your Marketplace screenshots and their prices.</p><button class="primary" style="width:auto" data-act="setup">Open setup</button>`}
+    if(!S.items.length){ibh=`<div class="noimg disp" style="color:var(--cran)">No items yet</div><p class="note">Open Setup to add your Marketplace screenshots and their prices, or start with 30 sample items.</p><div class="line" style="justify-content:center"><button class="primary" style="width:auto" data-act="samples">Use 30 sample items</button><button class="ghost" style="color:var(--cran);border-color:#9b2c2c55" data-act="setup">Open setup</button></div>`}
     else if(ph==='done'){const top=[...S.players].sort((a,b)=>b.score-a.score);const best=top[0]?top[0].score:0;const champs=top.filter(p=>p.score===best&&best>0);
-      ibh=`<h2 class="disp" style="color:#7a1626;font-size:clamp(28px,4vw,64px);text-align:center">${champs.length?esc(champs.map(p=>p.name).join(' & '))+' win'+(champs.length>1?'':'s')+'!':'Game over'}</h2><ul class="final">${top.map(p=>`<li><span>${esc(p.name)}</span><span>${p.score}</span></li>`).join('')}</ul>`}
+      ibh=`<h2 class="disp" style="color:var(--cran);font-size:clamp(28px,4vw,64px);text-align:center">${champs.length?esc(champs.map(p=>p.name).join(' & '))+' win'+(champs.length>1?'':'s')+'!':'Game over'}</h2><ul class="final">${top.map(p=>`<li><span>${esc(p.name)}</span><span>${p.score}</span></li>`).join('')}</ul>`}
     else{const src=imgs.get(it.id);const hid=ph!=='revealed';const c=it.cover;
-      ibh=(src?`<div class="shot"><img src="${src}" alt="">${c&&hid?`<div class="cover" style="left:${c.x*100}%;top:${c.y*100}%;width:${c.w*100}%;height:${c.h*100}%">?</div>`:''}</div>`:`<div class="noimg disp" style="color:#7a1626">${esc(it.title||'Mystery item')}</div>`)
+      ibh=(src?`<div class="shot"><img src="${src}" alt="">${c&&hid?`<div class="cover" style="left:${c.x*100}%;top:${c.y*100}%;width:${c.w*100}%;height:${c.h*100}%">?</div>`:''}</div>`:it.emoji?`<div class="listing"><div class="lpic">${esc(it.emoji)}</div><div class="lmeta">${(it.desc||[]).map(d=>`<span>${esc(d)}</span>`).join('')}</div></div>`
+          :`<div class="noimg disp" style="color:var(--cran)">${esc(it.title||'Mystery item')}</div>`)
         +`<div class="ititle">${esc(it.title||'')}</div><div class="icount">Item ${S.idx+1} of ${S.items.length}</div>`}
     if(ib._h!==ibh){ib.innerHTML=ibh;ib._h=ibh}
     /* side */
@@ -2687,7 +2742,7 @@ function hostApp(){
         +(local?'<div class="net">Phones can only join once this page is hosted online.</div>':'')+(netStatus?`<div class="net">${esc(netStatus)}</div>`:'')
         +(S.items.length?`<button class="primary" data-act="primary">Start round (${S.timerSec}s)</button>`:'')}
     else if(ph==='bidding'){h=`<h2>Place your bids!</h2><div class="big" id="cd">${Math.max(0,Math.ceil((S.endsAt-Date.now())/1000))}</div><div class="note" style="font-weight:700;font-size:18px">${nb} of ${S.players.length} bids in</div><button class="primary" data-act="primary">End bidding now</button>`}
-    else if(ph==='closed'){h=`<h2>Bids are in!</h2><div class="note" style="font-size:18px">${nb} of ${S.players.length} players bid.</div><button class="primary" data-act="primary">Reveal the price</button><button class="ghost" style="color:#7a1626;border-color:#7a162655" data-act="redo">Redo this round</button>`}
+    else if(ph==='closed'){h=`<h2>Bids are in!</h2><div class="note" style="font-size:18px">${nb} of ${S.players.length} players bid.</div><button class="primary" data-act="primary">Reveal the price</button><button class="ghost" style="color:var(--cran);border-color:#9b2c2c55" data-act="redo">Redo this round</button>`}
     else if(ph==='revealed'){const w=winnersOf(it.price,S.bids,S.rule);
       h=`<h2>Actual price</h2><div class="price">${money(it.price)}</div><div class="note" style="font-size:17px;font-weight:700">${w.length?'Closest: '+esc(w.map(id=>(S.players.find(p=>p.id===id)||{}).name).join(' & '))+'. Click a name to give a point.':(nb?'Everyone went over! Click a name to give a point anyway.':'No bids this round.')}</div><button class="primary" data-act="primary">${S.idx<S.items.length-1?'Next item':'Final scores'}</button>`}
     else if(ph==='done'){h=`<h2>Thanks for playing!</h2><button class="primary" data-act="restart">Play again</button>`}
@@ -2709,7 +2764,7 @@ function hostApp(){
     $('#plist').innerHTML=S.players.map(p=>`<span class="tagp">${esc(p.name)} <span class="note">${p.score}</span><button class="warn" data-act="delplayer" data-pid="${p.id}" aria-label="Remove ${esc(p.name)}">×</button></span>`).join('')||'<span class="note">No players yet.</span>';
     $('#rule').value=S.rule;
     $('#ilist').innerHTML=S.items.map((it,i)=>{const src=imgs.get(it.id);
-      return `<div class="irow" data-iid="${it.id}">${src?`<img src="${src}" alt="">`:'<div class="ph">no pic</div>'}
+      return `<div class="irow" data-iid="${it.id}">${src?`<img src="${src}" alt="">`:`<div class="ph"${it.emoji?' style="font-size:30px"':''}>${it.emoji?esc(it.emoji):'no pic'}</div>`}
         <input data-f="title" value="${esc(it.title)}" placeholder="What is it? (shown to players)" maxlength="60" aria-label="Item ${i+1} name">
         <input data-f="price" type="number" min="0" step="1" value="${it.price??''}" placeholder="Price $" aria-label="Item ${i+1} price">
         <div class="acts">${src?`<button class="lite" data-act="cover">${it.cover?'Edit cover':'Hide price'}</button>`:''}<button class="lite" data-act="up" ${i?'':'disabled'} aria-label="Move up">↑</button><button class="lite" data-act="down" ${i<S.items.length-1?'':'disabled'} aria-label="Move down">↓</button><button class="warn" data-act="delitem" aria-label="Delete item">×</button></div>
@@ -2752,6 +2807,7 @@ function hostApp(){
     const row=b.closest('[data-iid]'),ii=row?S.items.findIndex(x=>x.id===row.dataset.iid):-1;
     if(a==='primary')primary();
     else if(a==='setup')openSetup();
+    else if(a==='samples')addSamples();
     else if(a==='redo'){S.bids={};S.phase='ready';changed()}
     else if(a==='restart'){S.idx=0;S.phase='ready';S.bids={};S.players.forEach(x=>x.score=0);changed()}
     else if(a==='award'&&p){p.score++;beep(990,.12);changed();const pod=document.querySelector(`[data-pod="${pid}"]`);if(pod){const s=document.createElement('div');s.className='plus';s.textContent='+1';pod.appendChild(s);setTimeout(()=>s.remove(),800)}}
