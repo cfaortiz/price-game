@@ -172,7 +172,7 @@ dialog::backdrop{background:#160b08b3;-webkit-backdrop-filter:blur(4px);backdrop
       <div class="drop" id="drop">Drop screenshots here, paste them (Ctrl/Cmd+V), or
         <label style="display:inline-block"><input id="files" type="file" accept="image/*" multiple class="hide"><span style="text-decoration:underline;cursor:pointer;font-weight:700;color:var(--cran)">choose files</span></label>.
         <button type="button" class="lite" id="addBlank" style="margin-left:8px">Add item without a picture</button>
-        <div style="margin-top:12px"><button type="button" class="harvest" data-act="samples">Add 30 sample Marketplace items</button></div>
+        <div style="margin-top:12px"><button type="button" class="harvest" data-act="samples">Add 30 sample Marketplace items</button> <button type="button" class="harvest" data-act="mexican">Add 10 Mexican items</button></div>
       </div>
       <div id="ilist"></div>
       <p class="note">Screenshots stay in this browser. They are never uploaded.</p>
@@ -2677,8 +2677,19 @@ function hostApp(){
     ['🧸','Princess Diana Beanie Baby, "rare"','Used - like new','2 mi',25],
     ['🎄','7.5 ft pre-lit Christmas tree','Used - good','9 mi',70],
     ['🚗','2011 Honda Civic, 162k miles','Used - fair','20 mi',4800]];
-  function addSamples(){for(const [emoji,title,cond,dist,price] of SAMPLES)S.items.push({id:uid(),title,price,cover:null,emoji,desc:[cond,dist+' away']});
-    if(S.phase==='done')S.phase='ready';renderSetup();changed();toast('Added 30 sample items.')}
+  const MEXICAN=[
+    ['🪨','Volcanic stone molcajete, 8"','Used - good','5 mi',35],
+    ['🫓','Cast iron comal, 13", well seasoned','Used - good','3 mi',20],
+    ['🌮','Tortilla press, heavy cast iron','Used - like new','6 mi',25],
+    ['🪅','Giant handmade burro piñata','New','4 mi',45],
+    ['🧣','Authentic Saltillo sarape blanket','New','9 mi',30],
+    ['🎺','Mariachi trumpet with case','Used - good','12 mi',275],
+    ['🤠','Charro sombrero, embroidered','Used - like new','15 mi',120],
+    ['🏺','Talavera pottery vase, hand painted','Used - good','8 mi',60],
+    ['🫔','Tamalera steamer pot, 32 qt','Used - good','2 mi',40],
+    ['👗','Quinceañera dress with crinoline','Used - like new','17 mi',250]];
+  function addSamples(list){for(const [emoji,title,cond,dist,price] of list)S.items.push({id:uid(),title,price,cover:null,emoji,desc:[cond,dist+' away']});
+    if(S.phase==='done')S.phase='ready';renderSetup();changed();toast('Added '+list.length+' sample items.')}
 
   const item=()=>S.items[S.idx];
   const online=pid=>[...connPid.values()].includes(pid);
@@ -2807,7 +2818,8 @@ function hostApp(){
     const row=b.closest('[data-iid]'),ii=row?S.items.findIndex(x=>x.id===row.dataset.iid):-1;
     if(a==='primary')primary();
     else if(a==='setup')openSetup();
-    else if(a==='samples')addSamples();
+    else if(a==='samples')addSamples(SAMPLES);
+    else if(a==='mexican')addSamples(MEXICAN);
     else if(a==='redo'){S.bids={};S.phase='ready';changed()}
     else if(a==='restart'){S.idx=0;S.phase='ready';S.bids={};S.players.forEach(x=>x.score=0);changed()}
     else if(a==='award'&&p){p.score++;beep(990,.12);changed();const pod=document.querySelector(`[data-pod="${pid}"]`);if(pod){const s=document.createElement('div');s.className='plus';s.textContent='+1';pod.appendChild(s);setTimeout(()=>s.remove(),800)}}
