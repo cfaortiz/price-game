@@ -52,8 +52,8 @@ input,select{border:1.5px solid var(--line);border-radius:12px;padding:9px 12px;
 .cover.gone{animation:pop .5s forwards}
 @keyframes pop{to{transform:scale(1.5) rotate(8deg);opacity:0}}
 .noimg{font-size:clamp(28px,4vw,60px);text-align:center;padding:30px}
-.listing{display:flex;flex-direction:column;align-items:center;gap:14px;width:min(100%,560px)}
-.listing .lpic{width:100%;aspect-ratio:16/10;max-height:max(180px,calc(100vh - 520px));border-radius:22px;display:grid;place-items:center;font-size:clamp(80px,12vw,180px);line-height:1;background:radial-gradient(circle at 30% 25%,#fff3dc,#f6dcb4 55%,#e9c28f);box-shadow:inset 0 0 0 1px #00000010,0 14px 30px -18px #7a3a14}
+.listing{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.listing .lpic{width:min(100%,560px);aspect-ratio:16/10;max-height:max(180px,calc(100vh - 520px));border-radius:22px;display:grid;place-items:center;font-size:clamp(80px,12vw,180px);line-height:1;background:radial-gradient(circle at 30% 25%,#fff3dc,#f6dcb4 55%,#e9c28f);box-shadow:inset 0 0 0 1px #00000010,0 14px 30px -18px #7a3a14}
 .listing .lmeta{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .listing .lmeta span{background:#f4e6d0;color:#6a4a36;border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700}
 .ititle{font-weight:700;font-size:clamp(18px,1.8vw,28px);text-align:center}
@@ -172,10 +172,10 @@ dialog::backdrop{background:#160b08b3;-webkit-backdrop-filter:blur(4px);backdrop
       <div class="drop" id="drop">Drop screenshots here, paste them (Ctrl/Cmd+V), or
         <label style="display:inline-block"><input id="files" type="file" accept="image/*" multiple class="hide"><span style="text-decoration:underline;cursor:pointer;font-weight:700;color:var(--cran)">choose files</span></label>.
         <button type="button" class="lite" id="addBlank" style="margin-left:8px">Add item without a picture</button>
-        <div style="margin-top:12px"><button type="button" class="harvest" data-act="samples">Add 30 sample Marketplace items</button> <button type="button" class="harvest" data-act="mexican">Add 10 Mexican items</button></div>
+        <div style="margin-top:12px"><button type="button" class="harvest" data-act="samples">Add 30 sample Marketplace items</button> <button type="button" class="harvest" data-act="mexican">Add 10 Mexican items</button> <button type="button" class="warn" data-act="clearitems">Remove all items</button></div>
       </div>
       <div id="ilist"></div>
-      <p class="note">Screenshots stay in this browser. They are never uploaded.</p>
+      <p class="note">Screenshots stay in this browser. They are never uploaded. Sample photos are from Wikimedia Commons (<a href="CREDITS.md" target="_blank" rel="noopener">photo credits</a>).</p>
     </section>
     <section>
       <h3>Rules</h3>
@@ -2645,53 +2645,54 @@ function hostApp(){
     put(k,v){try{idb.tx('readwrite').put(v,k)}catch(e){}},del(k){try{idb.tx('readwrite').delete(k)}catch(e){}},
     all(){return new Promise(res=>{if(!idb.db)return res();try{const r=idb.tx('readonly').openCursor();r.onsuccess=()=>{const c=r.result;if(c){imgs.set(c.key,c.value);c.continue()}else res()};r.onerror=()=>res()}catch(e){res()}})}};
 
-  /* made-up but realistic Marketplace listings: [emoji, title, condition, distance, price] */
+  /* made-up but realistic Marketplace listings: [emoji, title, condition, distance, price]; photo i is img/NN.jpg (see CREDITS.md) */
   const SAMPLES=[
-    ['🧁','KitchenAid Artisan stand mixer, 5 qt, red','Used - like new','3 mi',180],
-    ['🚴','Peloton bike, original, with shoes','Used - good','11 mi',425],
-    ['🪑','Solid oak dining table + 6 chairs','Used - good','7 mi',350],
-    ['🎮','Nintendo Switch OLED + 3 games','Used - like new','2 mi',235],
-    ['🥣','Vintage Pyrex mixing bowls, set of 4','Used - fair','15 mi',65],
-    ['🛋️','Gray sectional couch, pet-free home','Used - good','9 mi',400],
-    ['🤸','14 ft trampoline with net, you haul','Used - fair','18 mi',90],
+    ['🧁','KitchenAid Artisan stand mixer, 5 qt, cranberry','Used - like new','3 mi',180],
+    ['🚴','Peloton bike, original, with mat','Used - good','11 mi',425],
+    ['🪑','Mission-style dining table + 8 chairs','Used - good','7 mi',450],
+    ['🎮','Nintendo Switch OLED, white','Used - like new','2 mi',235],
+    ['🥣','Vintage Pyrex glass mixing bowl, 4 qt','Used - good','15 mi',18],
+    ['🛋️','Red velvet chaise lounge sofa','Used - good','9 mi',375],
+    ['🤸','10 ft trampoline with net','Used - fair','18 mi',75],
     ['🍲','Instant Pot Duo, 6 qt','Used - like new','4 mi',40],
-    ['🚙','Power Wheels Jeep, 12V, two batteries','Used - good','6 mi',110],
+    ['🛻','1984 Dodge pickup, red, runs great','Used - good','23 mi',8900],
     ['🧹','Dyson V8 cordless vacuum','Used - good','5 mi',130],
     ['📺','Samsung 55" 4K smart TV','Used - like new','12 mi',220],
     ['🍳','Griswold #8 cast iron skillet','Used - good','22 mi',85],
     ['🦃','Turkey fryer kit, used twice','Used - like new','8 mi',45],
-    ['🔥','Weber Spirit II gas grill','Used - good','10 mi',175],
-    ['🗄️','Mid-century walnut dresser','Used - good','14 mi',275],
-    ['🏎️','Bin of 200+ Hot Wheels cars','Used - fair','3 mi',60],
-    ['📱','iPhone 13, 128 GB, cracked back','Used - fair','1 mi',240],
-    ['🎈','8 ft inflatable lawn turkey','Used - good','6 mi',30],
-    ['🪵','Electric fireplace TV stand','Used - like new','13 mi',150],
+    ['🔥','Weber Q portable gas grill','Used - good','10 mi',120],
+    ['🗄️','Antique mahogany chest of drawers','Used - good','14 mi',650],
+    ['🏎️','Box of 200+ Hot Wheels cars','Used - fair','3 mi',60],
+    ['📱','iPhone 13, 128 GB, blue','Used - good','1 mi',300],
+    ['🎈','Giant inflatable cartoon bird, 10 ft','Used - good','6 mi',85],
+    ['🪵','Electric fireplace insert, realistic flame','Used - like new','13 mi',90],
     ['🚜','John Deere riding mower, 42"','Used - good','25 mi',950],
-    ['👰','Wedding dress, size 8, never altered','New','19 mi',300],
+    ['👰','Wedding gown with long train, size 8','Used - like new','19 mi',600],
     ['🎸','Taylor acoustic guitar with hard case','Used - like new','8 mi',450],
     ['🛏️','Convertible crib + mattress','Used - good','5 mi',110],
-    ['❄️','4 snow tires on rims, 17"','Used - good','16 mi',320],
-    ['🫕','Le Creuset Dutch oven, 5.5 qt','Used - like new','7 mi',190],
-    ['🧊','Chest freezer, 7 cu ft','Used - good','11 mi',140],
-    ['💺','La-Z-Boy leather recliner','Used - fair','4 mi',160],
-    ['🧸','Princess Diana Beanie Baby, "rare"','Used - like new','2 mi',25],
-    ['🎄','7.5 ft pre-lit Christmas tree','Used - good','9 mi',70],
-    ['🚗','2011 Honda Civic, 162k miles','Used - fair','20 mi',4800]];
+    ['❄️','4 winter tires, 17", 70% tread','Used - good','16 mi',320],
+    ['🫕','Enameled Dutch oven, 5.5 qt','Used - like new','7 mi',90],
+    ['🧊','1950s Crosley chest freezer, still works','Used - fair','11 mi',200],
+    ['💺','Black leather power recliner','Used - good','4 mi',180],
+    ['🧸','Beanie Babies lot, 50+ with tags','Used - like new','2 mi',40],
+    ['🎄','6 ft pre-lit Christmas tree','Used - good','9 mi',45],
+    ['🚗','2012 Honda Civic LX, 148k miles','Used - good','20 mi',6200]];
   const MEXICAN=[
     ['🪨','Volcanic stone molcajete, 8"','Used - good','5 mi',35],
-    ['🫓','Cast iron comal, 13", well seasoned','Used - good','3 mi',20],
-    ['🌮','Tortilla press, heavy cast iron','Used - like new','6 mi',25],
-    ['🪅','Giant handmade burro piñata','New','4 mi',45],
-    ['🧣','Authentic Saltillo sarape blanket','New','9 mi',30],
-    ['🎺','Mariachi trumpet with case','Used - good','12 mi',275],
-    ['🤠','Charro sombrero, embroidered','Used - like new','15 mi',120],
+    ['🫓','Cast iron comal, 10.5", well seasoned','Used - good','3 mi',20],
+    ['🌮','Tortilla press, heavy cast aluminum','Used - like new','6 mi',25],
+    ['🪅','Giant handmade star piñata','New','4 mi',45],
+    ['🧣','Handwoven wool sarape blanket','Used - good','9 mi',45],
+    ['🎺','Mariachi trumpet, gold lacquer','Used - good','12 mi',275],
+    ['🤠','Straw sombrero with flag trim','Used - like new','15 mi',25],
     ['🏺','Talavera pottery vase, hand painted','Used - good','8 mi',60],
-    ['🫔','Tamalera steamer pot, 32 qt','Used - good','2 mi',40],
+    ['🫔','Tamalera steamer pot with lid','Used - good','2 mi',40],
     ['👗','Quinceañera dress with crinoline','Used - like new','17 mi',250]];
-  function addSamples(list){for(const [emoji,title,cond,dist,price] of list)S.items.push({id:uid(),title,price,cover:null,emoji,desc:[cond,dist+' away']});
+  function addSamples(list,first){list.forEach(([emoji,title,cond,dist,price],i)=>S.items.push({id:uid(),title,price,cover:null,emoji,src:'img/'+String(first+i).padStart(2,'0')+'.jpg',desc:[cond,dist+' away']}));
     if(S.phase==='done')S.phase='ready';renderSetup();changed();toast('Added '+list.length+' sample items.')}
 
   const item=()=>S.items[S.idx];
+  const picOf=it=>imgs.get(it.id)||it.src;
   const online=pid=>[...connPid.values()].includes(pid);
   const joinUrl=()=>location.origin+location.pathname+'?room='+S.code+(BC?'&transport=bc':'');
   const pub=()=>{const it=item();const w=S.phase==='revealed'&&it?winnersOf(it.price,S.bids,S.rule):[];
@@ -2740,8 +2741,9 @@ function hostApp(){
     if(!S.items.length){ibh=`<div class="noimg disp" style="color:var(--cran)">No items yet</div><p class="note">Open Setup to add your Marketplace screenshots and their prices, or start with 30 sample items.</p><div class="line" style="justify-content:center"><button class="primary" style="width:auto" data-act="samples">Use 30 sample items</button><button class="ghost" style="color:var(--cran);border-color:#9b2c2c55" data-act="setup">Open setup</button></div>`}
     else if(ph==='done'){const top=[...S.players].sort((a,b)=>b.score-a.score);const best=top[0]?top[0].score:0;const champs=top.filter(p=>p.score===best&&best>0);
       ibh=`<h2 class="disp" style="color:var(--cran);font-size:clamp(28px,4vw,64px);text-align:center">${champs.length?esc(champs.map(p=>p.name).join(' & '))+' win'+(champs.length>1?'':'s')+'!':'Game over'}</h2><ul class="final">${top.map(p=>`<li><span>${esc(p.name)}</span><span>${p.score}</span></li>`).join('')}</ul>`}
-    else{const src=imgs.get(it.id);const hid=ph!=='revealed';const c=it.cover;
-      ibh=(src?`<div class="shot"><img src="${src}" alt="">${c&&hid?`<div class="cover" style="left:${c.x*100}%;top:${c.y*100}%;width:${c.w*100}%;height:${c.h*100}%">?</div>`:''}</div>`:it.emoji?`<div class="listing"><div class="lpic">${esc(it.emoji)}</div><div class="lmeta">${(it.desc||[]).map(d=>`<span>${esc(d)}</span>`).join('')}</div></div>`
+    else{const src=picOf(it);const hid=ph!=='revealed';const c=it.cover;const meta=it.desc?`<div class="lmeta">${it.desc.map(d=>`<span>${esc(d)}</span>`).join('')}</div>`:'';
+      ibh=(src?`<div class="listing"><div class="shot"><img src="${esc(src)}" alt="">${c&&hid?`<div class="cover" style="left:${c.x*100}%;top:${c.y*100}%;width:${c.w*100}%;height:${c.h*100}%">?</div>`:''}</div>${meta}</div>`
+          :it.emoji?`<div class="listing"><div class="lpic">${esc(it.emoji)}</div>${meta}</div>`
           :`<div class="noimg disp" style="color:var(--cran)">${esc(it.title||'Mystery item')}</div>`)
         +`<div class="ititle">${esc(it.title||'')}</div><div class="icount">Item ${S.idx+1} of ${S.items.length}</div>`}
     if(ib._h!==ibh){ib.innerHTML=ibh;ib._h=ibh}
@@ -2774,12 +2776,12 @@ function hostApp(){
   function renderSetup(){
     $('#plist').innerHTML=S.players.map(p=>`<span class="tagp">${esc(p.name)} <span class="note">${p.score}</span><button class="warn" data-act="delplayer" data-pid="${p.id}" aria-label="Remove ${esc(p.name)}">×</button></span>`).join('')||'<span class="note">No players yet.</span>';
     $('#rule').value=S.rule;
-    $('#ilist').innerHTML=S.items.map((it,i)=>{const src=imgs.get(it.id);
+    $('#ilist').innerHTML=S.items.map((it,i)=>{const src=picOf(it);
       return `<div class="irow" data-iid="${it.id}">${src?`<img src="${src}" alt="">`:`<div class="ph"${it.emoji?' style="font-size:30px"':''}>${it.emoji?esc(it.emoji):'no pic'}</div>`}
         <input data-f="title" value="${esc(it.title)}" placeholder="What is it? (shown to players)" maxlength="60" aria-label="Item ${i+1} name">
         <input data-f="price" type="number" min="0" step="1" value="${it.price??''}" placeholder="Price $" aria-label="Item ${i+1} price">
         <div class="acts">${src?`<button class="lite" data-act="cover">${it.cover?'Edit cover':'Hide price'}</button>`:''}<button class="lite" data-act="up" ${i?'':'disabled'} aria-label="Move up">↑</button><button class="lite" data-act="down" ${i<S.items.length-1?'':'disabled'} aria-label="Move down">↓</button><button class="warn" data-act="delitem" aria-label="Delete item">×</button></div>
-        ${src?`<div style="grid-column:1/-1" class="${it.cover?'okt':'warnt'}">${it.cover?'Price is covered on the picture.':'If the price shows in this screenshot, press Hide price.'}</div>`:''}</div>`}).join('')||'<p class="note">No items yet.</p>'}
+        ${src&&!it.src?`<div style="grid-column:1/-1" class="${it.cover?'okt':'warnt'}">${it.cover?'Price is covered on the picture.':'If the price shows in this screenshot, press Hide price.'}</div>`:''}</div>`}).join('')||'<p class="note">No items yet.</p>'}
   async function addFiles(files){for(const f of files){if(!f.type.startsWith('image/'))continue;
       try{const url=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)});
         const im=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url});
@@ -2787,7 +2789,7 @@ function hostApp(){
         const data=c.toDataURL('image/jpeg',.86);const id=uid();imgs.set(id,data);idb.put(id,data);S.items.push({id,title:'',price:null,cover:null})}catch(e){toast('Could not read '+f.name)}}
     if(S.phase==='done')S.phase='ready';renderSetup();changed()}
   let edId=null,edRect=null;
-  function openCover(id){edId=id;const it=S.items.find(x=>x.id===id);edRect=it.cover?{...it.cover}:null;$('#edimg').src=imgs.get(id);drawEd();$('#coverDlg').showModal()}
+  function openCover(id){edId=id;const it=S.items.find(x=>x.id===id);edRect=it.cover?{...it.cover}:null;$('#edimg').src=picOf(it);drawEd();$('#coverDlg').showModal()}
   function drawEd(){const b=$('#edbox');if(!edRect){b.classList.add('hide');return}b.classList.remove('hide');b.style.cssText=`left:${edRect.x*100}%;top:${edRect.y*100}%;width:${edRect.w*100}%;height:${edRect.h*100}%`}
   {const wr=$('#edwrap');let o=null;const pt=e=>{const r=wr.getBoundingClientRect();return{x:Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),y:Math.min(1,Math.max(0,(e.clientY-r.top)/r.height))}};
     wr.addEventListener('pointerdown',e=>{o=pt(e);wr.setPointerCapture(e.pointerId);edRect={x:o.x,y:o.y,w:0,h:0};drawEd()});
@@ -2818,8 +2820,9 @@ function hostApp(){
     const row=b.closest('[data-iid]'),ii=row?S.items.findIndex(x=>x.id===row.dataset.iid):-1;
     if(a==='primary')primary();
     else if(a==='setup')openSetup();
-    else if(a==='samples')addSamples(SAMPLES);
-    else if(a==='mexican')addSamples(MEXICAN);
+    else if(a==='samples')addSamples(SAMPLES,0);
+    else if(a==='mexican')addSamples(MEXICAN,30);
+    else if(a==='clearitems'){if(!S.items.length||!confirm('Remove all '+S.items.length+' items?'))return;S.items.forEach(x=>{imgs.delete(x.id);idb.del(x.id)});S.items=[];S.idx=0;S.phase='ready';S.bids={};renderSetup();changed()}
     else if(a==='redo'){S.bids={};S.phase='ready';changed()}
     else if(a==='restart'){S.idx=0;S.phase='ready';S.bids={};S.players.forEach(x=>x.score=0);changed()}
     else if(a==='award'&&p){p.score++;beep(990,.12);changed();const pod=document.querySelector(`[data-pod="${pid}"]`);if(pod){const s=document.createElement('div');s.className='plus';s.textContent='+1';pod.appendChild(s);setTimeout(()=>s.remove(),800)}}
